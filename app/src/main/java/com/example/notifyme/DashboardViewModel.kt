@@ -9,15 +9,8 @@ class DashboardViewModel : ViewModel() {
     private val _isConnected = MutableStateFlow(false)
     val isConnected: StateFlow<Boolean> = _isConnected
 
-    private val _isSyncing = MutableStateFlow(false)
-    val isSyncing: StateFlow<Boolean> = _isSyncing
-
     private val _notificationLog = MutableStateFlow<List<NotificationData>>(emptyList())
     val notificationLog: StateFlow<List<NotificationData>> = _notificationLog
-
-    fun toggleSync() {
-        _isSyncing.value = !_isSyncing.value
-    }
 
     fun simulateConnection(connected: Boolean) {
         _isConnected.value = connected

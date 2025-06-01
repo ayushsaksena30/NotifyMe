@@ -55,7 +55,7 @@ fun LandingScreen(onGetStartedClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()){
         Column(
             modifier = Modifier
-                .padding(top=220.dp)
+                .padding(top=170.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally

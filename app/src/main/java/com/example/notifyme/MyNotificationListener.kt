@@ -78,11 +78,11 @@ class MyNotificationListener : NotificationListenerService() {
 
         DashboardViewModelSingleton.viewModel?.removeNotification(
             NotificationData(
-                appName = "", // doesn't matter for comparison
+                appName = "",
                 packageName = sbn.packageName,
                 title = title,
                 message = text,
-                timestamp = sbn.postTime // optional for match
+                timestamp = sbn.postTime
             )
         )
     }

@@ -1,7 +1,7 @@
 package com.example.notifyme
 
+import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceActivity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,14 +19,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -52,6 +52,7 @@ import com.example.notifyme.ui.theme.NotifyMeTheme
 import com.example.notifyme.ui.theme.clashDisplay
 import com.example.notifyme.ui.theme.latoFontFamily
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
+import okhttp3.internal.http2.Header
 
 class DashboardActivity : ComponentActivity() {
     private val viewModel = DashboardViewModel()
@@ -85,10 +86,9 @@ class DashboardActivity : ComponentActivity() {
 
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
-    val isConnected by viewModel.isConnected.collectAsState()
-    val isSyncing by viewModel.isSyncing.collectAsState()
+    val isConnected by viewModel.isConnected.collectAsState() //TODO: Handle this
     val logs by viewModel.notificationLog.collectAsState()
-
+    val context = LocalContext.current
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(WindowInsets.systemBars.asPaddingValues())
@@ -100,51 +100,66 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            Text(
-                "Dashboard",
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    fontSize = 40.sp,
-                    fontFamily = clashDisplay,
-                    fontWeight = FontWeight.Medium
+            Row {
+                Text(
+                    "Dashboard",
+                    style = MaterialTheme.typography.headlineLarge.copy(
+                        fontSize = 36.sp,
+                        fontFamily = clashDisplay,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.align(Alignment.CenterVertically)
                 )
-            )
-            Text(
-                text = "Connection: ${if (isConnected) "Connected!" else "Disconnected"}",
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    fontSize = 20.sp,
-                    fontFamily = latoFontFamily,
-                    fontWeight = FontWeight.Medium
-                )
-            )
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    onClick = {context.startActivity(Intent(context, SettingsActivity::class.java))},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Black
+                    ),
+                    shape = RoundedCornerShape(14.dp),
+                    border = BorderStroke(2.dp, Color.Black)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Add",
+                        Modifier.size(26.dp)
+                    )
+                }
+            }
 
-            Button( //TODO: Change sync logic
-                onClick = { viewModel.toggleSync() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if(isSyncing)Color(0xFF81FDA4) else Color.Transparent,
-                    contentColor = Color.Black
-                ),
-                border = BorderStroke(2.dp, Color.Black),
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "Sync"
+            Row {
+                Text(
+                    text = "Connection:",
+                    style = MaterialTheme.typography.headlineLarge.copy(
+                        fontSize = 26.sp,
+                        fontFamily = latoFontFamily,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.align(Alignment.CenterVertically)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(if (isSyncing) "Stop Sync" else "Start Sync",
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                    fontSize = 20.sp,
-                    fontFamily = latoFontFamily,
-                    fontWeight = FontWeight.Normal
-                ))
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    onClick = { /*TODO: Implement connection logic*/},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(14.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add",
+                        Modifier.size(26.dp)
+                    )
+                }
             }
 
             Row {
                 Text(
                     "Recent Notifications:",
                     style = MaterialTheme.typography.headlineLarge.copy(
-                        fontSize = 20.sp,
+                        fontSize = 26.sp,
                         fontFamily = latoFontFamily,
                         fontWeight = FontWeight.Medium
                     )
@@ -164,7 +179,7 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
 
             LazyColumn(
             ){
-                item { PreferenceActivity.Header() }
+                item { Header }
                 items(logs.reversed()) { notification ->
                     NotificationCard(notification,onDismiss = {
                         viewModel.removeNotification(notification)
@@ -172,13 +187,6 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text( //TODO: Gear icon top right
-                text = "Settings (coming soon)",
-                style = MaterialTheme.typography.labelMedium
-            )
         }
     }
 }
@@ -282,7 +290,7 @@ fun formatTimestamp(timestamp: Long): String {
 }
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(apiLevel = 33,showBackground = true, showSystemUi = true)
 fun DashboardPreview() {
         DashboardScreen(viewModel = DashboardViewModel())
 }
