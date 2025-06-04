@@ -1,6 +1,5 @@
 package com.example.notifyme
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,12 +23,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -97,40 +94,6 @@ fun SettingsScreen() {
                     ),
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
-            }
-
-            Row(modifier = Modifier
-                .border(
-                    width = 2.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(16.dp)
-            ) {
-                Text(
-                    text = "Theme",
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontSize = 26.sp,
-                        fontFamily = latoFontFamily,
-                        fontWeight = FontWeight.Medium
-                    ),
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    onClick = { /*TODO: Implement Theme Switch*/ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(14.dp),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add",
-                        Modifier.size(26.dp)
-                    )
-                }
             }
 
             Row(modifier = Modifier
