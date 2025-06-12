@@ -2,4 +2,5 @@
     <string name="app_name">NotifyMe</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_add_app">AddAppActivity</string>
 </resources>

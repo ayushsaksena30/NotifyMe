@@ -16,6 +16,11 @@
         android:theme="@style/Theme.NotifyMe"
         tools:targetApi="31">
         <activity
+            android:name=".AddAppActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_app"
+            android:theme="@style/Theme.NotifyMe" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings"
@@ -52,5 +57,12 @@
             </intent-filter>
         </service>
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
 
 </manifest>

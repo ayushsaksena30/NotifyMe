@@ -2,13 +2,23 @@ package com.example.notifyme
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.example.notifyme.NotificationData
-import android.util.Log
-import org.json.JSONObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MyNotificationListener : NotificationListenerService() {
     companion object {
         var instance: MyNotificationListener? = null
+        var excludedPackages: Set<String> = emptySet()
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        CoroutineScope(Dispatchers.Default).launch {
+            NotificationPrefs.getExcludedPackages(applicationContext).collect {
+                excludedPackages = it
+            }
+        }
     }
 
     override fun onListenerConnected() {
@@ -18,6 +28,7 @@ class MyNotificationListener : NotificationListenerService() {
 
     fun pushActiveNotificationsToViewModel() {
         val activeList = activeNotifications.mapNotNull { sbn ->
+            if (sbn.packageName in excludedPackages) return@mapNotNull null
             val extras = sbn.notification.extras
             val title = extras.getString("android.title") ?: return@mapNotNull null
             val text = extras.getString("android.text") ?: return@mapNotNull null
@@ -46,6 +57,7 @@ class MyNotificationListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         val packageName = sbn.packageName
+        if (packageName in excludedPackages) return
         val extras = sbn.notification.extras
         val title = extras.getString("android.title") ?: ""
         val text = extras.getString("android.text") ?: ""

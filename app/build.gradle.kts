@@ -30,11 +30,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -57,7 +57,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.5")
     implementation ("com.google.accompanist:accompanist-drawablepainter:0.30.1")
     implementation ("androidx.compose.material3:material3:1.2.1")
-
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

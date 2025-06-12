@@ -16,6 +16,12 @@ class DashboardViewModel : ViewModel() {
         _isConnected.value = connected
     }
 
+    fun removeExcludedNotifications() {
+        _notificationLog.value = _notificationLog.value.filterNot {
+            it.packageName in MyNotificationListener.excludedPackages
+        }
+    }
+
     fun addNotification(data: NotificationData) {
         val current = _notificationLog.value
         val isDuplicate = current.any {

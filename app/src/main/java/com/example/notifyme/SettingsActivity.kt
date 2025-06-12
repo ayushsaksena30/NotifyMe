@@ -1,5 +1,7 @@
 package com.example.notifyme
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,6 +60,8 @@ class SettingsActivity : ComponentActivity() {
 
 @Composable
 fun SettingsScreen() {
+    val context = LocalContext.current
+    val activity = context as? Activity
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(WindowInsets.systemBars.asPaddingValues()),
@@ -70,7 +75,7 @@ fun SettingsScreen() {
         ) {
             Row {
                 Button(
-                    onClick = {},
+                    onClick = {activity?.finish()},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
                         contentColor = Color.Black
@@ -96,38 +101,50 @@ fun SettingsScreen() {
                 )
             }
 
-            Row(modifier = Modifier
-                .border(
-                    width = 2.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(16.dp)
-            ) {
-                Text(
-                    text = "Apps to Exempt",
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontSize = 26.sp,
-                        fontFamily = latoFontFamily,
-                        fontWeight = FontWeight.Medium
-                    ),
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    onClick = { /*TODO: Implement Theme Switch*/ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(14.dp),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add",
-                        Modifier.size(26.dp)
+            Column(
+                modifier = Modifier
+                    .border(
+                        width = 2.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(12.dp)
                     )
+                    .padding(16.dp)
+            ) {
+                Row {
+                    Text(
+                        text = "Apps to Exempt",
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            fontSize = 26.sp,
+                            fontFamily = latoFontFamily,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        onClick = {
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    AddAppActivity::class.java
+                                )
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Black,
+                            contentColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(14.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add",
+                            Modifier.size(26.dp)
+                        )
+                    }
                 }
+
+                //TODO: Implement showing apps here.
             }
 
             Row(modifier = Modifier
